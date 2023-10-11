@@ -16,7 +16,7 @@ const EditKategori = () => {
         // Mengambil detail kategori menggunakan ID dari parameter URL
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/kategori/${id}`);
+                const response = await axios.get(`https://api-indita.vercel.app/kategori/${id}`);
                 const data = response.data.data;
                 //console.log('data', response.data.data)
                 if (data) {
@@ -38,7 +38,7 @@ const EditKategori = () => {
 
         try {
              // Kategori belum ada, lanjutkan dengan menambahkannya
-            const addResponse = await axios.patch(`http://localhost:3000/kategori/${id}`, {
+            const addResponse = await axios.patch(`https://api-indita.vercel.app/kategori/${id}`, {
                 kategori: kategori
             });
 

@@ -17,7 +17,7 @@ const AddKategori = () => {
 
         try {
             // Periksa apakah kategori sudah ada di database
-            const response = await axios.get('http://localhost:3000/checkKategori', {
+            const response = await axios.get('https://api-indita.vercel.app/checkKategori', {
                 params: {
                     kategori: kategori
                 }
@@ -28,7 +28,7 @@ const AddKategori = () => {
                 setError('Kategori sudah ada di database.');
             } else {
                 // Kategori belum ada, lanjutkan dengan menambahkannya
-                const addResponse = await axios.post('http://localhost:3000/addKategori', {
+                const addResponse = await axios.post('https://api-indita.vercel.app/addKategori', {
                     kategori: kategori
                 });
 

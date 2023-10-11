@@ -10,7 +10,7 @@ import { Dialog, Transition } from '@headlessui/react'
 const Kategori = () => {
   const [deleteKategoriId, setDeleteKategoriId] = useState(null)
 
-  const apiUrl = 'http://localhost:3000/kategori'
+  const apiUrl = 'https://api-indita.vercel.app/kategori'
 
   const { data: kategoriData, error } = useSwr(apiUrl, async (url) => {
     
