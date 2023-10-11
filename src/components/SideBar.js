@@ -127,17 +127,6 @@ const SideBar = () => {
                         </p>
                         </button>
                     </a>
-                    <ul id="dropdown-example" className="hidden py-2 space-y-2">
-                        <li>
-                            <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Products</a>
-                        </li>
-                        <li>
-                            <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Billing</a>
-                        </li>
-                        <li>
-                            <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Invoice</a>
-                        </li>
-                    </ul>
                 </li>
                 {/* <li>
                     <a aria-current="page" className="" href="/keyword">
@@ -170,7 +159,7 @@ const SideBar = () => {
                     </a>
                 </li> */}
                 <li>
-                    <a aria-current="page" className="" href="/intent">
+                    <a aria-current="page" className="" href="/intent" style={{ pointerEvents: 'none' }}>
                         <button
                         className={buttonClass('intent')}
                         type="button"
@@ -230,7 +219,7 @@ const SideBar = () => {
                     </a>
                 </li>
                 <li>
-                    <a aria-current="page" className="" href="/laporan">
+                    <a aria-current="page" className="" href="/laporan" style={{ pointerEvents: 'none' }}>
                         <button
                         className={buttonClass('laporan')}
                         type="button"
@@ -267,7 +256,7 @@ const SideBar = () => {
                     </p>
                 </li>
                 <li>
-                <a className="" href="#">
+                <a className="" href="#" style={{ pointerEvents: 'none' }}>
                     <button
                     className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
                     type="button"
