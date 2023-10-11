@@ -60,7 +60,7 @@ const AddMenu = () => {
                         'Content-Type': 'application/json',
                     },
                 });
-                console.log(id_subMenu)
+                // console.log(id_subMenu)
                 if (addMenu.status === 200) {
                     navigate('/menu2');
                 } else {

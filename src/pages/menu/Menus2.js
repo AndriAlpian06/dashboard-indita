@@ -221,7 +221,7 @@ const Menus2 = () => {
   };
 
   const addMenu = () => {
-    navigate('/addMenu');
+    navigate('/addMenu2');
   };
 
   const addSubMenu = () => {
@@ -463,7 +463,7 @@ const Menus2 = () => {
                               <div className="pt-2 space-x-4">
                                 <button
                                   type="button"
-                                  className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                  className="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
                                   onClick={addMenu}
                                   >
                                   Menu Utama
@@ -488,7 +488,7 @@ const Menus2 = () => {
                                   )}
                                   <button
                                   type="button"
-                                  className='inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2'
+                                  className='inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2'
                                   onClick={closeModal}
                                   >
                                   Batal
