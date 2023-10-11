@@ -1,0 +1,11 @@
+/* Tambahkan ini pada file CSS Anda */
+.submenu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Ubah jumlah kolom sesuai kebutuhan */
+  gap: 10px; /* Jarak antara elemen-elemen dalam grid */
+}
+
+.submenu-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+}

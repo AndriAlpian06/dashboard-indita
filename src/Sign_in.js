@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, Fragment } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from './components/AuthToken'
+import { Dialog, Transition } from '@headlessui/react'
 
 function Login () {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errModal, setErrModal] = useState(false)
+    const [meesage, setMessage] = useState('')
     const navigate = useNavigate()
     const auth = useAuth();
 
@@ -17,11 +20,19 @@ function Login () {
         setPassword(e.target.value);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+          // Lakukan apa yang Anda inginkan saat tombol "Enter" ditekan di sini
+          e.preventDefault();
+          handleSubmit();
+        }
+      };
+    
 
+    const handleSubmit = async (e) => {
+        
         try{
-            const response = await axios.post('http://localhost:3000/login/', {
+            const response = await axios.post('https://api-indita.vercel.app/login', {
                 email: email,
                 password: password,
             }, {
@@ -49,17 +60,32 @@ function Login () {
                     console.log('Invalid response data');
                 }
 
-            }else{
+            }else if (response.status === 401){
+                setMessage('Email tidak ditemukan')
+                setErrModal(true)
+                //console.log('Login failed with status code:', response.statusText);
 
-                console.log('Login failed with status code:', response.statusText);
+            }else if(response.status === 402){
+                setMessage('Password tidak ditemukan')   
+                setErrModal(true)
 
+            }else if(response.status === 403){
+                setMessage('Password anda tidak match')   
+                setErrModal(true)
+            }
+            else{
+                setMessage('Password anda salah')   
+                setErrModal(true)
             }
 
         } catch (error){
-            console.log('log failed login', error)
+            //console.log('log failed login', error)
+            setMessage('Username dan Password anda salah')
+            setErrModal(true)
         }
 
     }
+
   return (
     <>
         <div className="relative min-h-screen w-full">
@@ -111,7 +137,7 @@ function Login () {
                             <label className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-blue-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] behtmlFore:content[' '] behtmlFore:block behtmlFore:box-border behtmlFore:w-2.5 behtmlFore:h-1.5 behtmlFore:mt-[6.5px] behtmlFore:mr-1 peer-placeholder-shown:behtmlFore:border-transparent behtmlFore:rounded-tl-md behtmlFore:border-t peer-focus:behtmlFore:border-t-2 behtmlFore:border-l peer-focus:behtmlFore:border-l-2 behtmlFore:pointer-events-none behtmlFore:transition-all peer-disabled:behtmlFore:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[4.1] text-blue-gray-400 peer-focus:text-blue-500 behtmlFore:border-blue-gray-200 peer-focus:behtmlFore:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500 ml-4">Email</label>
                         </div>
                         <div className="relative w-full min-w-[200px] h-11">
-                            <input type="password" value={password} onChange={handlePasswordChange} className="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-3 rounded-md border-blue-gray-200 focus:border-blue-500" placeholder=" " />
+                            <input type="password" value={password} onChange={handlePasswordChange} onKeyDown={handleKeyPress} className="peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-3 rounded-md border-blue-gray-200 focus:border-blue-500" placeholder=" " />
                             <label className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-blue-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] behtmlFore:content[' '] behtmlFore:block behtmlFore:box-border behtmlFore:w-2.5 behtmlFore:h-1.5 behtmlFore:mt-[6.5px] behtmlFore:mr-1 peer-placeholder-shown:behtmlFore:border-transparent behtmlFore:rounded-tl-md behtmlFore:border-t peer-focus:behtmlFore:border-t-2 behtmlFore:border-l peer-focus:behtmlFore:border-l-2 behtmlFore:pointer-events-none behtmlFore:transition-all peer-disabled:behtmlFore:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[4.1] text-blue-gray-400 peer-focus:text-blue-500 behtmlFore:border-blue-gray-200 peer-focus:behtmlFore:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500 ml-4">Password</label>
                         </div>
                         <div className="-ml-2.5">
@@ -130,9 +156,62 @@ function Login () {
                             </div>
                         </div>
                      </div>
-            <div className="p-6 pt-0"><button className="middle none font-sans font-bold center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85] block w-full" type="button" onClick={handleSubmit}>Sign In</button>
-            </div>
-            </div>
+                    <div className="p-6 pt-0">
+                        <button className="middle none font-sans font-bold center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85] block w-full" type="button" onClick={handleSubmit}>Sign In</button>
+                    </div>
+                </div>
+                {errModal && (
+                    <Transition appear show={true} as={Fragment}>
+                        <Dialog as="div" className="relative z-10" onClose={() => setErrModal(false)}>
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <div className="fixed inset-0 bg-black bg-opacity-25" />
+                        </Transition.Child>
+                            <div className="fixed inset-0 overflow-y-auto">
+                                <div className="flex min-h-full items-center justify-center p-4 text-center">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 scale-95"
+                                    enterTo="opacity-100 scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 scale-100"
+                                    leaveTo="opacity-0 scale-95"
+                                >
+                                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                        <Dialog.Title 
+                                        as="h3" 
+                                        className="text-lg font-medium leading-6 text-gray-900">
+                                            Alert
+                                        </Dialog.Title>
+                                        <div className="mt-2">
+                                            <p className="text-sm text-gray-500">
+                                            {meesage}
+                                            </p>
+                                        </div>
+                                        <div className="pt-2 space-x-4">
+                                            <button
+                                            type="button"
+                                            className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                            onClick={() => setErrModal(null)}
+                                            >
+                                            Close
+                                            </button>
+                                        </div>
+                                    </Dialog.Panel>
+                                </Transition.Child>
+                                </div>
+                            </div>
+                        </Dialog>
+                    </Transition>
+                )}
             </div>
         <div className="container absolute bottom-8 left-2/4 z-10 mx-auto -translate-x-2/4 text-white">
             <footer className="py-2">

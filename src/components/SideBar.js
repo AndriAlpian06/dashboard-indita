@@ -1,16 +1,16 @@
 import React, {useState} from 'react'
 import { useAuth } from './AuthToken'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
+import '../assets/css/Sidebar.css'
+import '../assets/css/Dropdown.css'
 
 const SideBar = () => {
     const { logout } = useAuth()
     const navigate = useNavigate()
     const [activeMenu, setActiveMenu] = useState('');
+    const location = useLocation();
 
-    const handleMenuClick = (menu) => {
-        setActiveMenu(menu);
-      };
     
     const Logout = () => {
         //console.log('Logout clicked');
@@ -19,9 +19,26 @@ const SideBar = () => {
         // Lakukan tindakan lain yang diperlukan setelah logout.
     };
 
+    const handleMenuClick = (namaMenu) => {
+        setActiveMenu(namaMenu);
+        //console.log(`Menu yang diklik: ${namaMenu}`); 
+        // console.log(`activeMenu saat ini: ${activeMenu}`);
+    };
+
+    const isMenuActive = (backgroundMenu) => activeMenu === backgroundMenu;
+
+    const buttonClass = (backgroundMenu) =>
+        isMenuActive(backgroundMenu)
+            ? 'middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize'
+            : 'middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize';
+
   return (
     <>
-        <aside className="-translate-x-80 fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0" style={{backgroundImage: 'linear-gradient(to bottom right, #3b4252, #2e3440)'}}>
+        <aside 
+            className={`-translate-x-80 fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0`}
+            style={{
+                backgroundImage: 'linear-gradient(to bottom right, #3b4252, #2e3440)',
+            }}>
             <div className="relative border-b border-white/20">
             <a className="flex items-center gap-4 py-6 px-8" href="#/">
                 <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-white">
@@ -54,11 +71,16 @@ const SideBar = () => {
             <div className="m-4">
             <ul className="mb-4 flex flex-col gap-1">
                 <li>
-                <a aria-current="page" className={activeMenu === 'dashboard' ? 'active' : ''} href="/dashboard">
+                <a aria-current="page" className="" href='/dashboard'>
                     <button
-                    className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize"
+                    className={buttonClass('dashboard')}
                     type="button"
-                    onClick={() => handleMenuClick('dashboard')}
+                    onClick={(e) => {
+                        e.preventDefault(); // Mencegah perilaku default tombol
+                        handleMenuClick('dashboard');
+                        navigate('/dashboard');
+                      }}
+                    style={{ backgroundColor: location.pathname === '/dashboard' ? 'activeColor' : 'inactiveColor' }}
                     >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -77,82 +99,165 @@ const SideBar = () => {
                 </a>
                 </li>
                 <li>
-                <a className="" href="/intent">
-                    <button
-                    className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize ${activeMenu === 'intent' ? 'active' : ''}`}
-                    type="button"
-                    onClick={() => handleMenuClick('intent')}
-                    >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="w-5 h-5 text-inherit"
-                    >
-                        <path
-                        fillRule="evenodd"
-                        d="M1.5 5.625c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v12.75c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 18.375V5.625zM21 9.375A.375.375 0 0020.625 9h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zm0 3.75a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zm0 3.75a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zM10.875 18.75a.375.375 0 00.375-.375v-1.5a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5zM3.375 15h7.5a.375.375 0 00.375-.375v-1.5a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375zm0-3.75h7.5a.375.375 0 00.375-.375v-1.5A.375.375 0 0010.875 9h-7.5A.375.375 0 003 9.375v1.5c0 .207.168.375.375.375z"
-                        clipRule="evenodd"
-                        />
-                    </svg>
-                    <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                        Menu
-                    </p>
-                    </button>
-                </a>
+                    <a aria-current="page" className="" href="/menu">
+                        <button
+                        className={buttonClass('menu2')}
+                        type="button"
+                        onClick={(e) => {
+                            e.preventDefault(); // Mencegah perilaku default tombol
+                            handleMenuClick('menu2');
+                            navigate('/menu2');
+                        }}
+                        >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            aria-hidden="true"
+                            className="w-5 h-5 text-inherit"
+                        >
+                            <path
+                            fillRule="evenodd"
+                            d="M1.5 5.625c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v12.75c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 18.375V5.625zM21 9.375A.375.375 0 0020.625 9h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zm0 3.75a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zm0 3.75a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zM10.875 18.75a.375.375 0 00.375-.375v-1.5a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5zM3.375 15h7.5a.375.375 0 00.375-.375v-1.5a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375zm0-3.75h7.5a.375.375 0 00.375-.375v-1.5A.375.375 0 0010.875 9h-7.5A.375.375 0 003 9.375v1.5c0 .207.168.375.375.375z"
+                            clipRule="evenodd"
+                            />
+                        </svg>
+                        <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                            Menu
+                        </p>
+                        </button>
+                    </a>
+                    <ul id="dropdown-example" className="hidden py-2 space-y-2">
+                        <li>
+                            <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Products</a>
+                        </li>
+                        <li>
+                            <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Billing</a>
+                        </li>
+                        <li>
+                            <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Invoice</a>
+                        </li>
+                    </ul>
+                </li>
+                {/* <li>
+                    <a aria-current="page" className="" href="/keyword">
+                        <button
+                        className={buttonClass('keyword')}
+                        type="button"
+                        onClick={(e) => {
+                            e.preventDefault(); // Mencegah perilaku default tombol
+                            handleMenuClick('keyword');
+                            navigate('/keyword');
+                        }}
+                        >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            aria-hidden="true"
+                            className="w-5 h-5 text-inherit"
+                        >
+                            <path
+                            fillRule="evenodd"
+                            d="M1.5 5.625c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v12.75c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 18.375V5.625zM21 9.375A.375.375 0 0020.625 9h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zm0 3.75a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zm0 3.75a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zM10.875 18.75a.375.375 0 00.375-.375v-1.5a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5zM3.375 15h7.5a.375.375 0 00.375-.375v-1.5a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375zm0-3.75h7.5a.375.375 0 00.375-.375v-1.5A.375.375 0 0010.875 9h-7.5A.375.375 0 003 9.375v1.5c0 .207.168.375.375.375z"
+                            clipRule="evenodd"
+                            />
+                        </svg>
+                        <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                            Keyword
+                        </p>
+                        </button>
+                    </a>
+                </li> */}
+                <li>
+                    <a aria-current="page" className="" href="/intent">
+                        <button
+                        className={buttonClass('intent')}
+                        type="button"
+                        onClick={(e) => {
+                            e.preventDefault(); // Mencegah perilaku default tombol
+                            handleMenuClick('intent');
+                            navigate('/intent');
+                        }}
+                        >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            aria-hidden="true"
+                            className="w-5 h-5 text-inherit"
+                        >
+                            <path
+                            fillRule="evenodd"
+                            d="M1.5 5.625c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v12.75c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 18.375V5.625zM21 9.375A.375.375 0 0020.625 9h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zm0 3.75a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zm0 3.75a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zM10.875 18.75a.375.375 0 00.375-.375v-1.5a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5zM3.375 15h7.5a.375.375 0 00.375-.375v-1.5a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375zm0-3.75h7.5a.375.375 0 00.375-.375v-1.5A.375.375 0 0010.875 9h-7.5A.375.375 0 003 9.375v1.5c0 .207.168.375.375.375z"
+                            clipRule="evenodd"
+                            />
+                        </svg>
+                        <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                            Intent
+                        </p>
+                        </button>
+                    </a>
                 </li>
                 <li>
-                <a className="" href="/keyword">
-                    <button
-                    className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize ${activeMenu === 'keyword' ? 'active' : ''}`}
-                    type="button"
-                    onClick={() => handleMenuClick('keyword')}
-                    >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="w-5 h-5 text-inherit"
-                    >
-                        <path
-                        fillRule="evenodd"
-                        d="M1.5 5.625c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v12.75c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 18.375V5.625zM21 9.375A.375.375 0 0020.625 9h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zm0 3.75a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zm0 3.75a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zM10.875 18.75a.375.375 0 00.375-.375v-1.5a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5zM3.375 15h7.5a.375.375 0 00.375-.375v-1.5a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375zm0-3.75h7.5a.375.375 0 00.375-.375v-1.5A.375.375 0 0010.875 9h-7.5A.375.375 0 003 9.375v1.5c0 .207.168.375.375.375z"
-                        clipRule="evenodd"
-                        />
-                    </svg>
-                    <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                        Keyword
-                    </p>
-                    </button>
-                </a>
+                    <a aria-current="page" className="" href="/kategori">
+                        <button
+                        className={buttonClass('kategori')}
+                        type="button"
+                        onClick={(e) => {
+                            e.preventDefault(); // Mencegah perilaku default tombol
+                            handleMenuClick('kategori');
+                            navigate('/kategori');
+                        }}
+                        >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            aria-hidden="true"
+                            className="w-5 h-5 text-inherit"
+                        >
+                            <path
+                            fillRule="evenodd"
+                            d="M1.5 5.625c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v12.75c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 18.375V5.625zM21 9.375A.375.375 0 0020.625 9h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zm0 3.75a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zm0 3.75a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zM10.875 18.75a.375.375 0 00.375-.375v-1.5a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5zM3.375 15h7.5a.375.375 0 00.375-.375v-1.5a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375zm0-3.75h7.5a.375.375 0 00.375-.375v-1.5A.375.375 0 0010.875 9h-7.5A.375.375 0 003 9.375v1.5c0 .207.168.375.375.375z"
+                            clipRule="evenodd"
+                            />
+                        </svg>
+                        <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                            Kategori
+                        </p>
+                        </button>
+                    </a>
                 </li>
                 <li>
-                <a className="" href="/kategori">
-                    <button
-                    className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize ${activeMenu === 'kategori' ? 'active' : ''}`}
-                    type="button"
-                    onClick={() => handleMenuClick('kategori')}
-                    >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="w-5 h-5 text-inherit"
-                    >
-                        <path
-                        fillRule="evenodd"
-                        d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
-                        clipRule="evenodd"
-                        />
-                    </svg>
-                    <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                        Kategori
-                    </p>
-                    </button>
-                </a>
+                    <a aria-current="page" className="" href="/laporan">
+                        <button
+                        className={buttonClass('laporan')}
+                        type="button"
+                        onClick={(e) => {
+                            e.preventDefault(); // Mencegah perilaku default tombol
+                            handleMenuClick('laporan');
+                            navigate('/laporan');
+                        }}
+                        >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            aria-hidden="true"
+                            className="w-5 h-5 text-inherit"
+                        >
+                            <path
+                            fillRule="evenodd"
+                            d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
+                            clipRule="evenodd"
+                            />
+                        </svg>
+                        <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                            Laporan
+                        </p>
+                        </button>
+                    </a>
                 </li>
             </ul>
             <ul className="mb-4 flex flex-col gap-1">

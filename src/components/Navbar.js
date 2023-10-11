@@ -1,11 +1,14 @@
 import React, { useState, useEffect} from 'react'
 import { useAuth } from './AuthToken'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Navbar = () => {
     const { token, userId } = useAuth()
     const [userData, setUserData] = useState(null);
     const [error, setError] = useState(null);
+    const { logout } = useAuth()
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -15,18 +18,26 @@ const Navbar = () => {
             //   Authorization: `Bearer ${token}`,
             // };
     
-            const response = await axios.get(`http://localhost:3000/users/${userId}`);
+            const response = await axios.get(`https://api-indita.vercel.app/users/${userId}`);
             
             //console.log("name", userData.data[0].name);
             setUserData(response.data);
           } catch (error) {
             setError(error);
+            Logout()
           }
         };
     
         fetchData();
     }, 
     []);
+
+    const Logout = () => {
+        //console.log('Logout clicked');
+        logout();
+        navigate('/')
+        // Lakukan tindakan lain yang diperlukan setelah logout.
+    };
 
   return (
     <>
@@ -36,7 +47,7 @@ const Navbar = () => {
                 <nav aria-label="breadcrumb" className="w-max">
                     <ol className="flex flex-wrap items-center w-full bg-opacity-60 rounded-md bg-transparent p-0 transition-all">
                     <li className="flex items-center text-blue-gray-900 antialiased font-sans text-sm font-normal leading-normal cursor-pointer transition-colors duration-300 hover:text-light-blue-500">
-                        <a href="#/dashboard">
+                        <a href="/dashboard">
                         <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal opacity-50 transition-all hover:text-blue-500 hover:opacity-100">
                             dashboard
                         </p>
@@ -107,7 +118,7 @@ const Navbar = () => {
                         clipRule="evenodd"
                         />
                     </svg>
-                    {userData && userData.data[0].name && (
+                    {userData && userData.data[0].name &&  (
                         <p>{userData.data[0].name}</p>
                     )}
                     </button>

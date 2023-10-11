@@ -1,0 +1,16 @@
+/* Sidebar.css */
+
+:root {
+  --active-menu-bg: #4a90e2; /* Warna latar belakang menu aktif */
+  --inactive-menu-bg: #2e3440; /* Warna latar belakang menu non-aktif */
+}
+
+/* Warna latar belakang menu aktif */
+.active {
+  background-color: var(--active-menu-bg);
+}
+
+/* Untuk item menu non-aktif */
+ul.flex li:not(.active):hover {
+  background-color: var(--inactive-menu-bg);
+}

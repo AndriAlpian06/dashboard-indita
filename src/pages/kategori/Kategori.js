@@ -7,12 +7,12 @@ import Footer from '../../components/Footer'
 import { Dialog, Transition } from '@headlessui/react'
 
 
-const Keywords = () => {
-  const [deleteKeywordId, setDeleteKeywordId] = useState(null)
+const Kategori = () => {
+  const [deleteKategoriId, setDeleteKategoriId] = useState(null)
 
-  const apiUrl = 'http://localhost:3000/keyword'
+  const apiUrl = 'http://localhost:3000/kategori'
 
-  const { data: keywordData, error } = useSwr(apiUrl, async (url) => {
+  const { data: kategoriData, error } = useSwr(apiUrl, async (url) => {
     
     const response = await axios.get(url);
     return response.data;
@@ -25,7 +25,7 @@ const Keywords = () => {
     return <div>Error: { error.message }</div>
   }
 
-  if (!keywordData) {
+  if (!kategoriData) {
     return <div role="status" className='px-8 py-8 mx-auto flex items-center justify-center'>
               <svg aria-hidden="true" className="w-16 h-16 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -36,22 +36,23 @@ const Keywords = () => {
     // <div>Loading...</div>;
   }
 
-  const handleDeleteKeyword = async () => {
+  const handleDeleteKategori = async (e) => {
+    e.preventDefault();
+    
     try{
 
-      if(deleteKeywordId) {
+      if(deleteKategoriId) {
         
-        const apiUrl = `http://localhost:3000/deleteKeyword/${deleteKeywordId}`;
+        const apiUrl = `http://localhost:3000/kategori/${deleteKategoriId}`;
         await axios.delete(apiUrl)
 
         mutate(apiUrl);
 
-        setDeleteKeywordId(null)
+        setDeleteKategoriId(null)
       }
     }
     catch (error){
-      console.error('Error deleting keyword:', error);
-
+      console.error('Error deleting kategori:', error);
     }
   }
 
@@ -64,57 +65,15 @@ const Keywords = () => {
         <div className="p-4 xl:ml-80">
             {/* Navbar */}
             <Navbar />
-              {/* <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md overflow-hidden xl:col-span-2">
-                <div className="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none m-0 flex items-center justify-between p-6">
-                  <div>
-                    <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900 mb-1">Keywords</h6>
-                  </div>
-                  <div>
-                    <a className="" href="/addKeyword">
-                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add</button>
-                    </a>
-                  </div>
-                </div>
-                <div className="p-6 overflow-x-scroll px-0 pt-0 pb-2">
-                  <table className="w-full min-w-[640px] table-auto">
-                  <thead>
-                    <tr>
-                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Id</p>
-                      </th>
-                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Intent</p>
-                      </th>
-                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Deskripsi</p>
-                      </th>
-                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Total keyword</p>
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                      {keywordData.data && keywordData.data.map((keyword, index) => (
-                        <tr key={index}>
-                          <td className="border-b border-blue-gray-50 py-3 px-6 text-left">{index + 1}</td>
-                          <td className="border-b border-blue-gray-50 py-3 px-6 text-left">{keyword.intent}</td>
-                          <td className="border-b border-blue-gray-50 py-3 px-6 text-left">{keyword.deskripsi}</td>
-                          <td className="border-b border-blue-gray-50 py-3 px-6 text-left">{keyword.keyword.length}</td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-                </div>
-              </div> */}
               <div className="mt-12 mb-8 flex flex-col gap-12">
                 <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
                   <div className="relative bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-blue-500/40 shadow-lg -mt-6 mb-8 p-6">
-                    <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-white">Data Keyword
+                    <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-white">Data Kategori
                     </h6>
                   </div>
                   <div className='flex py-4'>
                     <div className='ml-4'>
-                      <a className="" href="/addKeyword">
+                      <a className="" href="/addKategori">
                         <div className='flex items-center'>
                             <button className="middle none center rounded-lg bg-blue-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                               data-ripple-light="true">
@@ -151,15 +110,7 @@ const Keywords = () => {
                             </p>
                           </th>
                           <th className="border-b border-blue-gray-50 py-3 px-5 text-left">
-                            <p className="block antialiased font-sans text-[11px] font-bold uppercase text-blue-gray-400">Intent
-                            </p>
-                          </th>
-                          <th className="border-b border-blue-gray-50 py-3 px-5 text-left">
-                            <p className="block antialiased font-sans text-[11px] font-bold uppercase text-blue-gray-400">Deskripsi
-                            </p>
-                          </th>
-                          <th className="border-b border-blue-gray-50 py-3 px-5 text-left">
-                            <p className="block antialiased font-sans text-[11px] font-bold uppercase text-blue-gray-400">Total Keyword
+                            <p className="block antialiased font-sans text-[11px] font-bold uppercase text-blue-gray-400">Katgori
                             </p>
                           </th>
                           <th className="border-b border-blue-gray-50 py-3 px-5 text-left">
@@ -170,7 +121,7 @@ const Keywords = () => {
                         </tr>
                         </thead>
                         <tbody>
-                          {keywordData.data && keywordData.data.map((keyword, index) => (
+                          {kategoriData.data && kategoriData.data.map((kategori, index) => (
                             <tr key={index}>
                               <td className="py-3 px-5 ">
                                 <div className="flex items-center gap-4">
@@ -181,21 +132,12 @@ const Keywords = () => {
                                 </div>
                               </td>
                               <td className="py-3 px-5 ">
-                                <p className="block antialiased font-sans text-xs font-semibold text-blue-gray-600">{keyword.intent}
+                                <p className="block antialiased font-sans text-xs font-semibold text-blue-gray-600">{kategori.kategori}
                                 </p>
                               </td>
                               <td className="py-3 px-5 ">
-                                <p className="block antialiased font-sans text-xs font-semibold text-blue-gray-600">{keyword.deskripsi}
-                                </p>
-                              </td>
-                              <td className="py-3 px-5 ">
-                                <p className="block antialiased font-sans text-xs font-semibold text-blue-gray-600">{keyword.keyword.length}
-                                </p>
-                              </td>
-                              <td className="py-3 px-5 ">
-                                <a href="#" 
+                                <a href={`/editKategori/${kategori.id}`}
                                   className="antialiased font-sans text-xs font-semibold text-blue-gray-600 inline-flex items-center"
-                                  // onClick={() => setDeleteKeywordId(keyword.id)}
                                   >
                                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 mr-1">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
@@ -203,7 +145,7 @@ const Keywords = () => {
                                 </a>
                                 <a href="#" 
                                   className="antialiased font-sans text-xs font-semibold text-blue-gray-600 inline-flex items-center"
-                                  onClick={() => setDeleteKeywordId(keyword.id)}
+                                  onClick={() => setDeleteKategoriId(kategori.id)}
                                   >
                                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 mr-1">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
@@ -217,9 +159,9 @@ const Keywords = () => {
                     </div>
                   </div>
               </div>
-              {deleteKeywordId && (
+              {deleteKategoriId && (
                 <Transition appear show={true} as={Fragment}>
-                  <Dialog as="div" className="relative z-10" onClose={() => setDeleteKeywordId(false)}>
+                  <Dialog as="div" className="relative z-10" onClose={() => setDeleteKategoriId(false)}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -246,24 +188,27 @@ const Keywords = () => {
                                   <Dialog.Title 
                                     as="h3" 
                                     className="text-lg font-medium leading-6 text-gray-900">
-                                      Delete Keyword
+                                      Delete Kategori
                                   </Dialog.Title>
                                   <div className="mt-2">
                                       <p className="text-sm text-gray-500">
-                                      Apakah Anda yakin ingin menghapus keyword ini?
+                                      Apakah Anda yakin ingin menghapus kategori ini?
                                       </p>
                                   </div>
                                   <div className="pt-2 space-x-4">
                                       <button
                                       type="button"
                                       className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                                      onClick={handleDeleteKeyword}>
+                                      // onClick={closeModal}
+                                      onClick={handleDeleteKategori}
+                                      >
                                       Ya
                                       </button>
                                       <button
                                       type="button"
                                       className="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-                                      onClick={() => setDeleteKeywordId(null)}>
+                                      onClick={() => setDeleteKategoriId(null)}
+                                      >
                                       Tidak
                                       </button>
                                   </div>
@@ -272,7 +217,7 @@ const Keywords = () => {
                           </div>
                       </div>
                   </Dialog>
-              </Transition>
+                </Transition>
               )}
               <Footer />
         </div>
@@ -280,4 +225,4 @@ const Keywords = () => {
   )
 }
 
-export default Keywords
+export default Kategori

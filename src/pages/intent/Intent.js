@@ -1,31 +1,32 @@
-import React, { useState, Fragment } from 'react'
-import Navbar from '../../components/Navbar'
+import React, { useState } from 'react'
 import SideBar from '../../components/SideBar'
-import axios from 'axios'
+import Navbar from '../../components/Navbar'
 import useSwr, { mutate} from 'swr'
-import Footer from '../../components/Footer'
-import { Dialog, Transition } from '@headlessui/react'
+import axios from 'axios'
+
+const apiUrl = 'http://localhost:3000/intent';
+
+const fetcherIntent = async (url) => {
+  const response = await axios.get(url)
+  return response.data
+}
 
 
-const Keywords = () => {
-  const [deleteKeywordId, setDeleteKeywordId] = useState(null)
+const Intent = () => {
 
-  const apiUrl = 'http://localhost:3000/keyword'
+  const [deleteIntentId, setDeleteIntentId] = useState(null)
 
-  const { data: keywordData, error } = useSwr(apiUrl, async (url) => {
-    
-    const response = await axios.get(url);
-    return response.data;
-  }, {
-    
+  const { data: dataIntent, err } = useSwr(apiUrl, fetcherIntent, {
     refreshInterVal: 5000,
   });
 
-  if(error){
-    return <div>Error: { error.message }</div>
+  //console.log(dataIntent)
+
+  if(err){
+    return <div>Error: { err.message }</div>
   }
 
-  if (!keywordData) {
+  if (!dataIntent) {
     return <div role="status" className='px-8 py-8 mx-auto flex items-center justify-center'>
               <svg aria-hidden="true" className="w-16 h-16 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -33,88 +34,23 @@ const Keywords = () => {
               </svg>
               <span className="sr-only">Loading...</span>
           </div>
-    // <div>Loading...</div>;
-  }
-
-  const handleDeleteKeyword = async () => {
-    try{
-
-      if(deleteKeywordId) {
-        
-        const apiUrl = `http://localhost:3000/deleteKeyword/${deleteKeywordId}`;
-        await axios.delete(apiUrl)
-
-        mutate(apiUrl);
-
-        setDeleteKeywordId(null)
-      }
-    }
-    catch (error){
-      console.error('Error deleting keyword:', error);
-
-    }
   }
 
   return (
     <>
-
-        {/* Sidabar */}
         <SideBar />
 
-        <div className="p-4 xl:ml-80">
-            {/* Navbar */}
-            <Navbar />
-              {/* <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md overflow-hidden xl:col-span-2">
-                <div className="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none m-0 flex items-center justify-between p-6">
-                  <div>
-                    <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900 mb-1">Keywords</h6>
-                  </div>
-                  <div>
-                    <a className="" href="/addKeyword">
-                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add</button>
-                    </a>
-                  </div>
-                </div>
-                <div className="p-6 overflow-x-scroll px-0 pt-0 pb-2">
-                  <table className="w-full min-w-[640px] table-auto">
-                  <thead>
-                    <tr>
-                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Id</p>
-                      </th>
-                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Intent</p>
-                      </th>
-                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Deskripsi</p>
-                      </th>
-                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Total keyword</p>
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                      {keywordData.data && keywordData.data.map((keyword, index) => (
-                        <tr key={index}>
-                          <td className="border-b border-blue-gray-50 py-3 px-6 text-left">{index + 1}</td>
-                          <td className="border-b border-blue-gray-50 py-3 px-6 text-left">{keyword.intent}</td>
-                          <td className="border-b border-blue-gray-50 py-3 px-6 text-left">{keyword.deskripsi}</td>
-                          <td className="border-b border-blue-gray-50 py-3 px-6 text-left">{keyword.keyword.length}</td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-                </div>
-              </div> */}
-              <div className="mt-12 mb-8 flex flex-col gap-12">
+        <div className='p-4 xl:ml-80'>
+          <Navbar />
+            <div className="mt-12 mb-8 flex flex-col gap-12">
                 <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
                   <div className="relative bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-blue-500/40 shadow-lg -mt-6 mb-8 p-6">
-                    <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-white">Data Keyword
+                    <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-white">Data Intent
                     </h6>
                   </div>
                   <div className='flex py-4'>
                     <div className='ml-4'>
-                      <a className="" href="/addKeyword">
+                      <a className="" href="/addIntent">
                         <div className='flex items-center'>
                             <button className="middle none center rounded-lg bg-blue-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                               data-ripple-light="true">
@@ -159,6 +95,10 @@ const Keywords = () => {
                             </p>
                           </th>
                           <th className="border-b border-blue-gray-50 py-3 px-5 text-left">
+                            <p className="block antialiased font-sans text-[11px] font-bold uppercase text-blue-gray-400">Modified
+                            </p>
+                          </th>
+                          <th className="border-b border-blue-gray-50 py-3 px-5 text-left">
                             <p className="block antialiased font-sans text-[11px] font-bold uppercase text-blue-gray-400">Total Keyword
                             </p>
                           </th>
@@ -168,9 +108,10 @@ const Keywords = () => {
                             </p>
                           </th>
                         </tr>
-                        </thead>
-                        <tbody>
-                          {keywordData.data && keywordData.data.map((keyword, index) => (
+                      </thead>
+                      <tbody>
+                        {dataIntent && dataIntent.length !== 0 ? (
+                          dataIntent.data.map((intent, index) => (
                             <tr key={index}>
                               <td className="py-3 px-5 ">
                                 <div className="flex items-center gap-4">
@@ -181,15 +122,19 @@ const Keywords = () => {
                                 </div>
                               </td>
                               <td className="py-3 px-5 ">
-                                <p className="block antialiased font-sans text-xs font-semibold text-blue-gray-600">{keyword.intent}
+                                <p className="block antialiased font-sans text-xs font-semibold text-blue-gray-600">{intent.intent}
                                 </p>
                               </td>
                               <td className="py-3 px-5 ">
-                                <p className="block antialiased font-sans text-xs font-semibold text-blue-gray-600">{keyword.deskripsi}
+                                <p className="block antialiased font-sans text-xs font-semibold text-blue-gray-600">{intent.deskripsi}
                                 </p>
                               </td>
                               <td className="py-3 px-5 ">
-                                <p className="block antialiased font-sans text-xs font-semibold text-blue-gray-600">{keyword.keyword.length}
+                                <p className="block antialiased font-sans text-xs font-semibold text-blue-gray-600">{intent.updateAt}
+                                </p>
+                              </td>
+                              <td className="py-3 px-5 ">
+                                <p className="block antialiased font-sans text-xs font-semibold text-blue-gray-600">{intent.keywords.length}
                                 </p>
                               </td>
                               <td className="py-3 px-5 ">
@@ -203,7 +148,7 @@ const Keywords = () => {
                                 </a>
                                 <a href="#" 
                                   className="antialiased font-sans text-xs font-semibold text-blue-gray-600 inline-flex items-center"
-                                  onClick={() => setDeleteKeywordId(keyword.id)}
+                                  onClick={() => setDeleteIntentId(intent.id)}
                                   >
                                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 mr-1">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
@@ -211,73 +156,27 @@ const Keywords = () => {
                                 </a>
                               </td>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                          ))
+                          ) : (                           
+                            <tr>
+                              <td className="py-3 px-5" colSpan="5">
+                                <div className="flex items-center gap-4">
+                                  <div className='mx-auto'>
+                                    <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-semibold">Data Intent Masih Kosong
+                                    </p>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                        )}
+                      </tbody>
+                    </table>
                   </div>
-              </div>
-              {deleteKeywordId && (
-                <Transition appear show={true} as={Fragment}>
-                  <Dialog as="div" className="relative z-10" onClose={() => setDeleteKeywordId(false)}>
-                    <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                    >
-                        <div className="fixed inset-0 bg-black bg-opacity-25" />
-                    </Transition.Child>
-                      <div className="fixed inset-0 overflow-y-auto">
-                          <div className="flex min-h-full items-center justify-center p-4 text-center">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                  <Dialog.Title 
-                                    as="h3" 
-                                    className="text-lg font-medium leading-6 text-gray-900">
-                                      Delete Keyword
-                                  </Dialog.Title>
-                                  <div className="mt-2">
-                                      <p className="text-sm text-gray-500">
-                                      Apakah Anda yakin ingin menghapus keyword ini?
-                                      </p>
-                                  </div>
-                                  <div className="pt-2 space-x-4">
-                                      <button
-                                      type="button"
-                                      className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                                      onClick={handleDeleteKeyword}>
-                                      Ya
-                                      </button>
-                                      <button
-                                      type="button"
-                                      className="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-                                      onClick={() => setDeleteKeywordId(null)}>
-                                      Tidak
-                                      </button>
-                                  </div>
-                                </Dialog.Panel>
-                            </Transition.Child>
-                          </div>
-                      </div>
-                  </Dialog>
-              </Transition>
-              )}
-              <Footer />
+                </div>
+            </div>
         </div>
     </>
   )
 }
 
-export default Keywords
+export default Intent

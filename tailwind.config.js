@@ -13,5 +13,15 @@ module.exports = {
     },
   },
   plugins: [],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        include: /node_modules/, // Izinkan impor file CSS dari node_modules
+        use: ['style-loader', 'css-loader'],
+      },
+      // ...
+    ],
+  },
 }
 
